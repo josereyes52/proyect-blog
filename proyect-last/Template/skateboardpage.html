@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html >
+	<head>
+		<meta charset="UTF-8">
+		<title>Skateboard Page</title>
+
+
+		<link rel="stylesheet" href="stylepage/stylepage.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="stylepage/js/script.js"></script>
+		<script type="text/javascript" src="stylepage/js/javascript.js"></script>
+		<script src="stylepage/js/helper.js"></script>
+	</head>
+	<body class = "bodyy">
+		<header>
+			<nav>
+				<ul>
+					<li><a href="/skateboardpage">SkateBoard-Page</a></li>
+					<img id='logo' src="imagen/logo/logo.png">
+					<li><a href="/casualclosetpage">Casual Closet-Page</a></li>
+				</ul>
+			</nav>
+		</header>
+		<div class="body-skate">
+			
+			<div class="second">
+				<div class="box-left">
+					<div class="box-max">
+														
+					</div> 
+			
+				</div> 	
+				<div class="box-right">
+					
+				</div>
+				<div class="icono-cargar">
+					<span class="cargar" id = "car">
+						<img src="imagen/icono/cargar.png" class="cargar">
+					</span>
+					<img src="imagen/cargando/loading.gif" class="loading" id= "load">
+					<p id = "dontpost">Don't More Post</p>
+				</div>
+			</div>
+		</div>
+		<div id="modal">
+			<div class="contexto">
+				<span onclick="desplegar(false,'modal','url')" class ="close" style="cursor: pointer;">X</span>
+				<img id="imagemodal"src="imagen/skate/trucos.jpg">
+			</div>
+		</div>
+
+	<!-- Script update more -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var autoincrem = 0;
+
+			$.getJSON( "/skateboardpage/.json", function( value ) {
+				var formattedfirsttile = HTMLfirsttile.replace("%firsttitle%",value[autoincrem].titlemax);
+
+				var formattedfirstdesingleft = HTMLFirstdesingleft.replace("%urlportadamax%",value[autoincrem].imageu)
+																  .replace("%urlportadamax%",value[autoincrem].imageu);
+
+				var formattedfirstdesignright = HTMLFirstdesingright.replace("%urlminportada%",value[autoincrem].imaged)
+																	.replace("%urlminportada%",value[autoincrem].imaged)
+																	.replace("%title%",value[autoincrem].titleminu)
+																	.replace("%text%",value[autoincrem].textu)
+																	.replace("%created%",value[autoincrem].created)
+																	.replace("%urlminportada%",value[autoincrem].imaget)
+																	.replace("%urlminportada%",value[autoincrem].imaget)
+																	.replace("%title%",value[autoincrem].titlemind)
+																	.replace("%text%",value[autoincrem].textd)
+																	.replace("%created%",value[autoincrem].created);
+				$(".body-skate").prepend(formattedfirsttile)
+				
+				$(".box-right").prepend(formattedfirstdesignright)
+				/*console.log(formattedfirstdesingleft);*/
+				$(".box-left").prepend(formattedfirstdesingleft)
+				autoincrem +=1; 
+				console.log("paso por aqui"+ value);
+			});
+
+			function visible(){
+				document.getElementById("car").style.visibility="visible";
+				document.getElementById("load").style.visibility="hidden";
+			}
+
+			$("#car").click(function(){
+				$.ajax({
+					url: "/skateboardpage/.json",
+					method: "GET",
+					dataType: "json",
+					beforeSend: function(){
+						document.getElementById("car").style.visibility="hidden";
+						document.getElementById("load").style.visibility="visible";
+					},
+					success: function(data) {
+						var sizejson = data.length-1;
+
+						console.log(autoincrem,sizejson)
+
+						if (autoincrem<=sizejson){
+							var formatteddesignleft = HTMLdesignleft.replace("%firtstitle%",data[autoincrem].titlemax)
+												       		        .replace("%urlportada%",data[autoincrem].imageu)
+												       		        .replace("%urlportada%",data[autoincrem].imageu);
+
+							var formatteddesignright = 	HTMLdesignright.replace("%urlminportada%",data[autoincrem].imaged)
+																	   .replace("%urlminportada%",data[autoincrem].imaged)   
+																	   .replace("%secondtitle%",data[autoincrem].titleminu)	
+																	   .replace("%parrafo%",data[autoincrem].textu)	
+																	   .replace("%created%",data[autoincrem].created)
+																	   .replace("%urlminportada%",data[autoincrem].imaget)
+																	   .replace("%urlminportada%",data[autoincrem].imaget)
+												  					   .replace("%secondtitle%",data[autoincrem].titlemind)   
+												  			           .replace("%parrafo%",data[autoincrem].textd)    
+												  			           .replace("%created%",data[autoincrem].created);
+							visible();
+							console.log(formatteddesignleft);				  
+							$(".box-left").append(formatteddesignleft)
+							$(".box-right").append(formatteddesignright)
+							autoincrem+=1;
+						}else{
+							document.getElementById("load").style.visibility="hidden";
+							document.getElementById("dontpost").style.visibility="visible";
+						}
+						
+
+					},
+
+					error: function(){
+						alert("Error Al Cargar");
+						visible();
+					}
+				});
+			});
+		});
+	</script>
+	</body>
+</html>
